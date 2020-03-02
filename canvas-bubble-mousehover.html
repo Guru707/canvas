@@ -56,6 +56,7 @@
             mouseY = e.y;
             console.log(mouseX);
             console.log(mouseY);
+            console.log(e);
         }
 
         window.addEventListener('resize', function () {
@@ -93,7 +94,8 @@
             this.update = function () {
 
                 if (this.x + this.radius > innerWidth || this.x - this.radius < 0) {
-                    this.dx = -dx;
+                    this.dx = -this.dx;
+                    console.log(" ddfdf" + this.dx);
                 }
                 if (this.y + this.radius > innerHeight || this.y - this.radius < 0) {
                     this.dy = -this.dy;
@@ -102,10 +104,11 @@
                 this.x += this.dx;
                 this.y += this.dy;
 
+                    //console.log("x value" + this.x)
                 if (mouseX - this.x < 50 && mouseX - this.x > -50 &&
                     mouseY - this.y < 50 && mouseY - this.y > -50) {
-                    console.log();
-                    this.radius += 1;
+                    //console.log();
+                    //this.radius += 1;
                     if (this.radius < maxRadius) {
                         this.radius += 1;
                     }
