@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>canvas</title>
+    <style>
+        body {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #4e8696, #70acc1);
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="cv" width="" height=""></canvas>
+
+    <script>
+        var cv = document.getElementById("cv");
+        cv.width = window.innerWidth;
+        cv.height = window.innerHeight;
+        var ctx = cv.getContext("2d");
+        const PI = Math.PI;
+        var maxRadius = 40;
+        var minRadius;
+        var mouseX;
+        var mouseY;
+
+        var colorArray = [
+        "#0A2459",
+        "#0D2F73",
+        "#16558C",
+        "#147CA6",
+        "#36B1BF",
+        "#43CAD9",
+        "#B6F2F2",
+        "#F2F2F2",
+        "#FFFFFF",
+        "#B7E8C4",
+        "#CBFFC9",
+        "#B7E8E0",
+
+        ]
+
+        window.addEventListener('mousemove', mousemove);
+        
+        function mousemove(e) {
+            mouseX = e.x;
+            mouseY = e.y;
+            console.log(mouseX);
+            console.log(mouseY);
+            console.log(e);
+        }
+
+        window.addEventListener('resize', function () {
+            cv.width = window.innerWidth;
+            cv.height = window.innerHeight;
+            init();
+        })
+
+        function Circle(x, y, dx, dy, radius) {
+            // this.getRandomColor = function () {
+            //     var color =
+            //         `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() + 0.1 })`;
+            //     console.log(color);
+            //     return color;
+            // }
+
+            this.x = x;
+            this.y = y;
+            this.dx = dx;
+            this.dy = dy;
+            this.radius = radius;
+            this.minRadius = radius;
+            //this.fiilColor = this.getRandomColor(); //function use
+            this.fiilColor = colorArray[Math.floor(Math.random() * colorArray.length)];
+
+
+            this.draw = function () {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, PI * 2);
+                // ctx.strokeStyle = "red"; 
+                // ctx.stroke(); 
+                ctx.fillStyle = this.fiilColor;
+                ctx.fill();
+            }
+            this.update = function () {
+
+                if (this.x + this.radius > innerWidth || this.x - this.radius < 0) {
+                    this.dx = -this.dx;
+                    console.log(" ddfdf" + this.dx);
+                }
+                if (this.y + this.radius > innerHeight || this.y - this.radius < 0) {
+                    this.dy = -this.dy;
+                }
+
+                this.x += this.dx;
+                this.y += this.dy;
+
+                    //console.log("x value" + this.x)
+                if (mouseX - this.x < 50 && mouseX - this.x > -50 &&
+                    mouseY - this.y < 50 && mouseY - this.y > -50) {
+                    //console.log();
+                    //this.radius += 1;
+                    if (this.radius < maxRadius) {
+                        this.radius += 1;
+                    }
+
+                } else if (this.radius > this.minRadius) {
+                    this.radius -= 1;
+                }
+                this.draw();
+
+            }
+        }
+
+
+        
+        var circleArray = [];        
+        function init() {         
+             circleArray = [];   
+            for (var i = 0; i < 800; i++) {
+                var x = Math.random() * innerWidth;
+                var y = Math.random() * innerHeight;
+                var radius = Math.random() * 10 + 1;
+                var dx = (Math.random() - 0.5);
+                var dy = (Math.random() - 0.5) ;
+                var circle = new Circle(x, y, dx, dy, radius);
+                circleArray.push(circle);
+
+            }
+        }
+
+        console.log(circleArray);
+
+        function animation() {
+            requestAnimationFrame(animation);
+            ctx.clearRect(0, 0, innerWidth, innerHeight);
+               
+            for (let i = 0; i < circleArray.length; i++) {
+                circleArray[i].update();
+
+            }
+            //circle.update();     
+        }
+        animation();
+        init();
+    </script>
+
+</body>
+
+</html>
